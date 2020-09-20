@@ -1,0 +1,56 @@
+import unittest
+from selenium import webdriver
+import page
+import os
+from faker import Faker
+
+
+DRIVER_PATH = os.getcwd() + "/drivers/chromedriver"
+
+class SogetiTest(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome(DRIVER_PATH)
+        self.driver.get("https://sogeti.com")
+        self.driver.implicitly_wait(10) # seconds
+
+
+    def test_automation_page(self):
+        mainPage = page.MainPage(self.driver)
+        mainPage.hover_over_services()
+        mainPage.click_automation_link()
+        automationPage = page.AutomationPage(self.driver)
+        assert automationPage.is_automation_page()
+        assert automationPage.is_automation_selected()
+    
+
+    def test_automation_form(self):
+        mainPage = page.MainPage(self.driver)
+        mainPage.hover_over_services()
+        mainPage.click_automation_link()
+        automationPage = page.AutomationPage(self.driver)
+        automationPage.scroll_to_contactform()
+        
+        # full up the form with fake data
+        f = Faker()
+        fullname = f.name().split(" ")
+        automationPage.fname = fullname[0]
+        automationPage.lname = fullname[1]
+        automationPage.email = f.email()
+        automationPage.phone = f.phone_number()
+        automationPage.message = "Example Message"
+        
+        automationPage.send_the_form()
+        assert automationPage.is_message_sent()
+
+
+    def test_country_list(self):
+        mainPage = page.MainPage(self.driver)
+        mainPage.is_country_list_ok()
+
+    def tearDown(self):
+        self.driver.close()
+
+
+if __name__ == "__main__":
+    unittest.main()
