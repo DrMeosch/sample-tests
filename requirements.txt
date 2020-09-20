@@ -1,0 +1,4 @@
+Faker
+requests
+selenium
+pytest
