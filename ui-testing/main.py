@@ -1,8 +1,9 @@
-import unittest
 from selenium import webdriver
+from faker import Faker
+from selenium.webdriver.support.ui import WebDriverWait
+import unittest
 import page
 import os
-from faker import Faker
 
 
 DRIVER_PATH = os.getcwd() + "/drivers/chromedriver"
@@ -13,6 +14,9 @@ class SogetiTest(unittest.TestCase):
         self.driver = webdriver.Chrome(DRIVER_PATH)
         self.driver.get("https://sogeti.com")
         self.driver.implicitly_wait(10) # seconds
+        WebDriverWait(self.driver, 10).until(
+            lambda wd: 'complete' == (self.driver.execute_script("return document.readyState;"))
+        )
 
 
     def test_automation_page(self):
