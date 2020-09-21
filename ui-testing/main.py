@@ -35,7 +35,7 @@ class SogetiTest(unittest.TestCase):
         automationPage = page.AutomationPage(self.driver)
         automationPage.scroll_to_contactform()
         
-        # full up the form with fake data
+        # fill out the form with fake data
         f = Faker()
         fullname = f.name().split(" ")
         automationPage.fname = fullname[0]
